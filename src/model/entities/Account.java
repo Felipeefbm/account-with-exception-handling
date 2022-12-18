@@ -1,31 +1,26 @@
 package model.entities;
 
-import model.exceptions.BusinesException;
+import model.exceptions.BusinessException;
 
 public class Account {
-	
 	
 	private Integer number;
 	private String holder;
 	private Double balance;
-	private Double WithdrawLimit;
+	private Double withdrawLimit;
 	
 	public Account() {
 	}
-
+	
 	public Account(Integer number, String holder, Double balance, Double withdrawLimit) {
 		this.number = number;
 		this.holder = holder;
 		this.balance = balance;
-		WithdrawLimit = withdrawLimit;
+		this.withdrawLimit = withdrawLimit;
 	}
 
 	public Integer getNumber() {
 		return number;
-	}
-
-	public void setNumber(Integer number) {
-		this.number = number;
 	}
 
 	public String getHolder() {
@@ -41,25 +36,27 @@ public class Account {
 	}
 	
 	public Double getWithdrawLimit() {
-		return WithdrawLimit;
+		return withdrawLimit;
 	}
 	
-	public void deposit(double amount) {
+	public void deposit (Double amount) {
 		balance += amount;
 	}
 	
-	public void withdraw (double amount) {
+	public void withdraw(Double amount) {  // se voltar alguma mensagem de erro o metodo withdraw é "cortado" na validação
 		validateWithdraw(amount);
-		balance -= amount;
+		balance-= amount;
 	}
 	
-	private void validateWithdraw(double amount) {                 
-		if (amount > getWithdrawLimit()) {
-			throw new BusinesException("Erro de saque: A quantia excede o limite de saque");
-		} 
+	private void validateWithdraw(Double amount) { 
 		if (amount > getBalance()) {
-			throw new BusinesException("Erro de saque: Saldo insuficiente");
+			throw new BusinessException("Erro: not enough balance");
 		}
+		if(amount > getWithdrawLimit()) {
+			throw new BusinessException("Erro: the amount exceeds withdraw limit");
+		}
+		
 	}
+		
 	
 }
